@@ -81,6 +81,9 @@ class Post
     #[Assert\Count(max: 4, maxMessage: 'post.too_many_tags')]
     private Collection $tags;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $attachmentFilename = null;
+
     public function __construct()
     {
         $this->publishedAt = new \DateTimeImmutable();
@@ -195,5 +198,17 @@ class Post
     public function getTags(): Collection
     {
         return $this->tags;
+    }
+
+    public function getAttachmentFilename(): ?string
+    {
+        return $this->attachmentFilename;
+    }
+
+    public function setAttachmentFilename(?string $attachmentFilename): static
+    {
+        $this->attachmentFilename = $attachmentFilename;
+
+        return $this;
     }
 }

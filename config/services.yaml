@@ -6,6 +6,7 @@
 parameters:
     locale: 'en'
     app.notifications.email_sender: anonymous@example.com
+    app.uploads_directory: '%kernel.project_dir%/public/uploads'
 
 services:
     # default configuration for services in *this* file
@@ -27,3 +28,7 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
+
+    App\Service\FileUploader:
+        arguments:
+            $targetDirectory: '%app.uploads_directory%'

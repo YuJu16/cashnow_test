@@ -16,6 +16,7 @@ use App\Entity\User;
 use App\Form\PostType;
 use App\Repository\PostRepository;
 use App\Security\PostVoter;
+use App\Service\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -76,6 +77,7 @@ final class BlogController extends AbstractController
         #[CurrentUser] User $user,
         Request $request,
         EntityManagerInterface $entityManager,
+        FileUploader $fileUploader,
     ): Response {
         $post = new Post();
         $post->setAuthor($user);
@@ -91,6 +93,12 @@ final class BlogController extends AbstractController
         // throws an exception if the form has not been submitted.
         // See https://symfony.com/doc/current/forms.html#processing-forms
         if ($form->isSubmitted() && $form->isValid()) {
+            $attachmentFile = $form->get('attachmentFile')->getData();
+            if ($attachmentFile) {
+                $attachmentFilename = $fileUploader->upload($attachmentFile);
+                $post->setAttachmentFilename($attachmentFilename);
+            }
+
             $entityManager->persist($post);
             $entityManager->flush();
 
@@ -136,12 +144,18 @@ final class BlogController extends AbstractController
      */
     #[Route('/{id:post}/edit', name: 'admin_post_edit', requirements: ['id' => Requirement::POSITIVE_INT], methods: ['GET', 'POST'])]
     #[IsGranted('edit', subject: 'post', message: 'Posts can only be edited by their authors.')]
-    public function edit(Request $request, Post $post, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, Post $post, EntityManagerInterface $entityManager, FileUploader $fileUploader): Response
     {
         $form = $this->createForm(PostType::class, $post);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $attachmentFile = $form->get('attachmentFile')->getData();
+            if ($attachmentFile) {
+                $attachmentFilename = $fileUploader->upload($attachmentFile);
+                $post->setAttachmentFilename($attachmentFilename);
+            }
+
             $entityManager->flush();
             $this->addFlash('success', 'post.updated_successfully');
 

@@ -15,12 +15,14 @@ use App\Entity\Post;
 use App\Form\Type\DateTimePickerType;
 use App\Form\Type\TagsInputType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\Validator\Constraints\File;
 
 /**
  * Defines the form used to create and manipulate blog posts.
@@ -69,6 +71,16 @@ final class PostType extends AbstractType
             ->add('tags', TagsInputType::class, [
                 'label' => 'label.tags',
                 'required' => false,
+            ])
+            ->add('attachmentFile', FileType::class, [
+                'label' => 'Attachment (PDF, image...)',
+                'mapped' => false,
+                'required' => false,
+                'constraints' => [
+                    new File([
+                        'maxSize' => '5M',
+                    ]),
+                ],
             ])
             // form events let you modify information or fields at different steps
             // of the form handling process.
