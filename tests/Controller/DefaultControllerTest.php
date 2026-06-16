@@ -84,14 +84,14 @@ final class DefaultControllerTest extends WebTestCase
         );
     }
 
-    public function getPublicUrls(): \Generator
+    public static function getPublicUrls(): \Generator
     {
         yield ['/'];
         yield ['/en/blog/'];
         yield ['/en/login'];
     }
 
-    public function getSecureUrls(): \Generator
+    public static function getSecureUrls(): \Generator
     {
         yield ['/en/admin/post/'];
         yield ['/en/admin/post/new'];
