@@ -84,10 +84,20 @@ final class DefaultControllerTest extends WebTestCase
         );
     }
 
+    public function testSearchByTagReturnsResults(): void
+    {
+        $client = static::createClient();
+        $client->request('GET', '/en/blog/search?q=lorem');
+
+        $this->assertResponseIsSuccessful('The search page loads correctly.');
+        $this->assertSelectorExists('article', 'Search for "lorem" tag should return posts.');
+    }
+
     public static function getPublicUrls(): \Generator
     {
         yield ['/'];
         yield ['/en/blog/'];
+        yield ['/en/blog/search'];
         yield ['/en/login'];
     }
 
