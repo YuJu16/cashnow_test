@@ -1,5 +1,4 @@
 <?php
-
 /*
  * This file is part of the Symfony package.
  *
@@ -74,9 +73,9 @@ class PostRepository extends ServiceEntityRepository
 
         foreach ($searchTerms as $key => $term) {
             $queryBuilder
-                ->orWhere('p.title LIKE :t_'.$key)
-                ->orWhere('t.name LIKE :t_'.$key)
-                ->setParameter('t_'.$key, '%'.$term.'%')
+                ->orWhere('p.title LIKE :t_' . $key)
+                ->orWhere('t.name LIKE :t_' . $key)
+                ->setParameter('t_' . $key, '%' . $term . '%')
             ;
         }
 

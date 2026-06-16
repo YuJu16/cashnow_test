@@ -48,7 +48,7 @@ final class UserControllerTest extends WebTestCase
         );
     }
 
-    public function getUrlsForAnonymousUsers(): \Generator
+    public static function getUrlsForAnonymousUsers(): \Generator
     {
         yield ['GET', '/en/profile/edit'];
         yield ['GET', '/en/profile/change-password'];
