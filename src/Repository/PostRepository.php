@@ -69,11 +69,13 @@ class PostRepository extends ServiceEntityRepository
             return [];
         }
 
-        $queryBuilder = $this->createQueryBuilder('p');
+        $queryBuilder = $this->createQueryBuilder('p')
+            ->leftJoin('p.tags', 't');
 
         foreach ($searchTerms as $key => $term) {
             $queryBuilder
                 ->orWhere('p.title LIKE :t_'.$key)
+                ->orWhere('t.name LIKE :t_'.$key)
                 ->setParameter('t_'.$key, '%'.$term.'%')
             ;
         }
